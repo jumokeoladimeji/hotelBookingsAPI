@@ -75,26 +75,6 @@ module.exports = function(app) {
         });
     });
 
-    app.route('/api/getAllHotels').get(function(req, res) {
-    
-
-        needle.get('public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80', function(error, response) {
-            if (error) {
-                res.send({
-                    message: error
-                });
-            }
-
-            if (!error && response.statusCode == 200) {
-                var responseObj = JSON.parse(response.body);
-                res.json({
-                    count: responseObj.data.length,
-                    data: responseObj
-                });
-            }
-        });
-    });
-
 
     // app.route('/api/getAllStateCities/:stateId').get(function(req, res) {
     //     var id = req.params.stateId;
@@ -221,7 +201,7 @@ module.exports = function(app) {
     // app.route('/api/getHotelDetails/:statename').get(function(req, res) {
 
     //     var statename = req.params.statename;
-    //     var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+    //     var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
     //     needle.get(url, function(error, response) {
     //         if (error) {
     //             res.send({
@@ -241,10 +221,30 @@ module.exports = function(app) {
     //     });
     // });
 
+    
+    app.route('/api/getAllHotels').get(function(req, res) {
+    
+
+        needle.get('public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80', function(error, response) {
+            if (error) {
+                res.send({
+                    message: error
+                });
+            }
+
+            if (!error && response.statusCode == 200) {
+                var responseObj = JSON.parse(response.body);
+                res.json({
+                    count: responseObj.data.length,
+                    data: responseObj
+                });
+            }
+        });
+    });
 
     app.route('/api/getHotelDetails/Lagos').get(function(req, res) {
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -268,7 +268,7 @@ module.exports = function(app) {
     app.route('/api/getHotelDetails/Abuja').get(function(req, res) {
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -293,7 +293,7 @@ module.exports = function(app) {
     app.route('/api/getHotelDetails/Oyo').get(function(req, res) {
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -317,7 +317,7 @@ module.exports = function(app) {
     app.route('/api/getHotelDetails/CrossRiver').get(function(req, res) {
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -341,7 +341,7 @@ module.exports = function(app) {
     app.route('/api/getHotelDetails/Kano').get(function(req, res) {
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -366,7 +366,7 @@ module.exports = function(app) {
     app.route('/api/getHotelDetails/Kaduna').get(function(req, res) {
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
@@ -395,7 +395,7 @@ module.exports = function(app) {
         // console.log('result', result);
 
         // var statename = req.params.statename;
-        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
+        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&hotels_per_page=80';
         needle.get(url, function(error, response) {
             if (error) {
                 res.send({
