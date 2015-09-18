@@ -366,26 +366,6 @@ module.exports = function(app) {
 
 
 //no ogun state
-    //  app.route('/api/getHotelDetails/Ogun').get(function(req, res) {
-
-    //       // var statename = req.params.statename;
-    //        var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels';
-    //     needle.get(url, function(error, response) {
-    //         if (error) {
-    //             res.send({
-    //                 message: error
-    //             });
-    //         }
-    //         if (!error && response.statusCode == 200) {
-    //             var responseObj = JSON.parse(response.body).data;
-    //             var obj = _.findWhere(responseObj, { 'statename': 'Ogun'});
-    //             res.json({
-    //                 data: obj
-    //             });
-
-    //         }
-    //     });
-    // });
 
       app.route('/api/getHotelDetails/Plateau').get(function(req, res) {
 
