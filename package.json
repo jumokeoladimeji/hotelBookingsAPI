@@ -1,37 +1,38 @@
 {
-    "name": "hotelBookings",
-    "version": "1.0.0",
-    "description": "An app to integrate hotelng API",
-    "main": "server.js",
-    "scripts": {
-        "test": "test"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/andela-joladimeji/hotelBookingsAPI"
-    },
-    "author": "jumoke",
-    "license": "ISC",
-    "dependencies": {
-        "body-parser": "^1.13.3",
-        "errorhandler": "^1.4.2",
-        "express": "^4.13.3",
-        "express-session": "^1.11.3",
-        "gulp": "^3.9.0",
-        "gulp-concat": "^2.6.0",
-        "gulp-nodemon": "^2.0.4",
-        "http": "0.0.0",
-        "jade": "^1.11.0",
-        "jsonwebtoken": "^5.0.5",
-        "lodash": "^3.10.1",
-        "method-override": "^2.3.5",
-        "mongoose": "^4.1.6",
-        "morgan": "^1.6.1",
-        "multer": "^1.0.3",
-        "needle": "^0.10.0",
-        "rand-token": "^0.2.1"
-    },
-    "engines": {
-        "node": "0.10.34"
-    }
+  "name": "hotelBookings",
+  "version": "1.0.0",
+  "description": "An app to integrate hotelng API",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andela-joladimeji/hotelBookingsAPI"
+  },
+  "author": "jumoke",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.13.3",
+    "errorhandler": "^1.4.2",
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-nodemon": "^2.0.4",
+    "http": "0.0.0",
+    "jade": "^1.11.0",
+    "jsonwebtoken": "^5.0.5",
+    "lodash": "^3.10.1",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.1.6",
+    "morgan": "^1.6.1",
+    "multer": "^1.0.3",
+    "needle": "^0.10.0",
+    "rand-token": "^0.2.1"
+  },
+  "engines": {
+    "node": "0.10.34"
+  }
 }

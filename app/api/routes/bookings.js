@@ -387,7 +387,7 @@ module.exports = function(app) {
         });
     });
 
-
+//http://public.api.hotels.ng/api/api.php?cmd=get_hotel_details&hotel_id=46585
     //no ogun state
 
     app.route('/api/getHotelDetails/Plateau').get(function(req, res) {
