@@ -12,7 +12,7 @@ var jwt        = require("jsonwebtoken");
 var mongoose   = require("mongoose");
 
 var mongoose   = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/myWork');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/hotelsDB');
 var db = mongoose.connection;
 
 
