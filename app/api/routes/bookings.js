@@ -102,12 +102,35 @@ module.exports = function(app) {
     });
   });
 
-  // after selecting a hotel get all rooms in that hotel
+
+// after selecting a hotel get all rooms in that hotel
+   app.route('/api/getHotelDetails/:hotelId').get(function(req, res) {
+      var hotelId = req.params.hotelId;
+      var url ='http://public.api.hotels.ng/api/api.php?cmd=get_hotel_details&hotel_id=' + hotelId;
+      needle.get(url, function(error, response) {
+      if (error) {
+        console.log('eerrr', error);
+        res.status(500).send({
+          message: error
+        });
+      }
+      if (!error && response.statusCode == 200) {
+        var responseArray = JSON.parse(response.body).data;
+         res.status(200).send({
+          data: responseArray
+         });
+      }
+      
+    });
+  });
+
+
+
+  
   app.route('/api/getHotelRooms/:hotelId').get(function(req, res) {
       var hotelId = req.params.hotelId;
       var url ='http://public.api.hotels.ng/api/api.php?cmd=get_hotel_rooms&hotel_id=' + hotelId;
       needle.get(url, function(error, response) {
-        console.log('needle going ot get for you');
       if (error) {
         console.log('eerrr', error);
         res.status(500).send({
@@ -125,7 +148,7 @@ module.exports = function(app) {
     });
   });
 
-
+ 
 
   app.route('/api/bookHotel').post(function(req, res) {
 
