@@ -20,7 +20,6 @@ var saveToMongo = function(hotels) {
           data: err
         });
       }
-      console.log('saved to mongo');
       return;
     });
   });
@@ -32,7 +31,6 @@ module.exports = function(app) {
     var page = 1;
     var getAllHotels = function() {
       var url = 'public.api.hotels.ng/api/api.php?cmd=get_all_hotels&page=' + page + '&hotels_per_page=100';
-      console.log(url);
       needle.get(url, function(error, response) {
         var responseObj;
         var body = response.body;
@@ -67,7 +65,7 @@ module.exports = function(app) {
     };
     getAllHotels();
   });
-
+  // /api/v1/hotels/:statename
   app.route('/api/getByState/:statename').get(function(req, res) {
     var statename = req.params.statename;
     Hotels.find({
@@ -85,6 +83,7 @@ module.exports = function(app) {
     });
   });
 
+  // /api/v1/hotels/:city
   app.route('/api/getByCity/:city').get(function(req, res) {
     var city = req.params.city;
     Hotels.find({
@@ -102,12 +101,12 @@ module.exports = function(app) {
     });
   });
 
-
-// after selecting a hotel get all rooms in that hotel
-   app.route('/api/getHotelDetails/:hotelId').get(function(req, res) {
-      var hotelId = req.params.hotelId;
-      var url ='http://public.api.hotels.ng/api/api.php?cmd=get_hotel_details&hotel_id=' + hotelId;
-      needle.get(url, function(error, response) {
+  // /api/v1/hotels/:hotelId/details
+  // after selecting a hotel get all rooms in that hotel
+  app.route('/api/getHotelDetails/:hotelId').get(function(req, res) {
+    var hotelId = req.params.hotelId;
+    var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_hotel_details&hotel_id=' + hotelId;
+    needle.get(url, function(error, response) {
       if (error) {
         console.log('eerrr', error);
         res.status(500).send({
@@ -116,21 +115,21 @@ module.exports = function(app) {
       }
       if (!error && response.statusCode == 200) {
         var responseArray = JSON.parse(response.body).data;
-         res.status(200).send({
+        res.status(200).send({
           data: responseArray
-         });
+        });
       }
-      
+
     });
   });
 
 
 
-  
+  // /api/v1/hotels/:hotelId/rooms
   app.route('/api/getHotelRooms/:hotelId').get(function(req, res) {
-      var hotelId = req.params.hotelId;
-      var url ='http://public.api.hotels.ng/api/api.php?cmd=get_hotel_rooms&hotel_id=' + hotelId;
-      needle.get(url, function(error, response) {
+    var hotelId = req.params.hotelId;
+    var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_hotel_rooms&hotel_id=' + hotelId;
+    needle.get(url, function(error, response) {
       if (error) {
         console.log('eerrr', error);
         res.status(500).send({
@@ -139,31 +138,47 @@ module.exports = function(app) {
       }
       if (!error && response.statusCode == 200) {
         var responseArray = JSON.parse(response.body).data;
-         res.status(200).send({
+        res.status(200).send({
           count: responseArray.length,
           data: responseArray
-         });
+        });
       }
-      
+
     });
   });
 
- 
-
-  app.route('/api/bookHotel').post(function(req, res) {
-
-    //should we hard code company id or will it come from the front end
-    var url = 'public.api.hotels.ng/api/api.php?cmd=make_booking';
-    var data = req.body;
-    needle.post(url, data, function(error, response) {
+   app.route('/api/getHotelBookingInfo').post(function(req, res) {
+    var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
+    var data = req.body;    
+    request({
+      url: url, 
+      method: 'POST',
+      json: data
+    }, function(error, response, body) {
       if (error) {
-        return res.status(500).send({
-          message: error
-        });
+        res.json(error);
+      } else {
+        res.json({data:body});
       }
-      if (!error && response.statusCode == 200) {
-        console.log('response', response.body);
-        return;
+    });
+  });
+   
+  // /api/v1/hotels/:hotelId/bookHotel
+  app.route('/api/bookHotel').post(function(req, res) {
+    var url = 'http://public.api.hotels.ng/api/api.php?cmd=make_booking';
+    var data = req.body;
+    request({
+      url: url, //URL to hit
+      //Query string data
+      method: 'POST',
+      //Lets post the following key/values as form
+      json: data
+    }, function(error, response, body) {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json({data:body});
+      
       }
     });
   });
