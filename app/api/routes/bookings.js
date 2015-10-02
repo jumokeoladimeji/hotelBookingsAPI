@@ -3,7 +3,6 @@ var express = require('express'),
   needle = require('needle'),
   Hotels = require('../../models/hotels'),
   request = require('request'),
-  superagent = require('superagent'),
   _ = require('lodash');
 
 var jwt = require('jsonwebtoken');
