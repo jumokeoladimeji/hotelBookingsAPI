@@ -26,6 +26,8 @@ var saveToMongo = function(hotels) {
 };
 
 module.exports = function(app) {
+  // TODO: Have a script that does this at intervals
+
   app.route('/api/saveAllHotels').get(function(req, res) {
     var hotels = [];
     var page = 1;
@@ -137,7 +139,6 @@ module.exports = function(app) {
     needle.get(url, function(error, response) {
       var responseArray;
       if (error) {
-        console.log('eerrr', error);
         res.status(500).send({
           message: error
         });
@@ -158,44 +159,30 @@ module.exports = function(app) {
     });
   });
 
+  //change this to a GET
   app.route('/api/getHotelBookingInfo').post(function(req, res) {
     var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
     var data = req.body;
-
-    // where data = {
-    //   "hotel_id": "53591",
-    //   "checkin": "2015-10-13",
-    //   "checkout": "2015-10-14",
-    //   "booked_rooms": [{
-    //     "id": "4191",
-    //     "num": "1"
-    //   }]
-    // }
-
     needle.post(url, data, function(error, response) {
       var responseObj;
+      var body = JSON.stringify(response.body);
+      try {
+          responseObj = JSON.parse(response.body).data;
+
+        } catch (e) {
+          console.log(e);
+        }
       if (error) {
         res.status(500).send({
           message: error
         });
       }
       if (!error && response.statusCode == 200) {
-        try {
-          responseObj = JSON.parse(response.body).data;
-
-        } catch (e) {
-          console.log(e);
-        }
         res.status(200).send({
           data: responseObj
         });
       }
-//       response = {
-//   "data": {
-//     "key": "22857d9c607da869b2158c57a9fe3c85",
-//     "total_price": 28000
-//   }
-// }
+
     });
 
   });
@@ -205,50 +192,26 @@ module.exports = function(app) {
     var url = 'http://public.api.hotels.ng/api/api.php?cmd=make_booking';
     var data = req.body;
 
-    // var data = {"client_title": "Miss",
-    // "client_full_name": "Jumoke Oladimeji",
-    // "country_id": "157",
-    // "email_address": "jumoke5ng@yahoo.com",
-    // "phone": "+234 8029067568",
-    // "checkin": "2015-10-13 00:00:00",
-    // "checkout": "2015-10-14 00:00:00",
-    // "hotel_id": "53591",
-    // "key": key_from_getHotelBookingInfo}
-
     needle.post(url, data, function(error, response) {
       var responseObj;
+      try {
+        responseObj = JSON.parse(response.body);
+
+      } catch (e) {
+        console.log(e);
+      }
       if (error) {
         res.status(500).send({
-          message: error
+          message: error,
         });
       }
-      if (!error && response.statusCode == 200) {
-        try {
-          responseObj = JSON.parse(response.body).data;
-
-        } catch (e) {
-          console.log(e);
-        }
+      if (responseObj.status === "error") {
+        res.status(500).send(responseObj);
+      } else if (!error && (response.statusCode === 200) && (responseObj.status != "error")) {
         res.status(200).send({
-          data: responseObj.booking
+          data: responseObj
         });
       }
-
-//       response.data= {
-//   "data": {
-//     "client_title": "Miss",
-//     "client_full_name": "Jumoke Oladimeji",
-//     "country_id": "157",
-//     "email_address": "jumoke5ng@yahoo.com",
-//     "phone": "+234 8029067568",
-//     "checkin": "2015-10-13 00:00:00",
-//     "checkout": "2015-10-14 00:00:00",
-//     "hotel_id": "53591",
-//     "total_price": 28000,
-//     "id": 754929
-//   }
-// }
-
     });
   });
 
