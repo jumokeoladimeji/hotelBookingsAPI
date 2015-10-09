@@ -31,6 +31,7 @@
     "morgan": "^1.6.1",
     "multer": "^1.0.3",
     "needle": "^0.10.0",
+    "newrelic": "^1.22.1",
     "rand-token": "^0.2.1",
     "request": "^2.63.0"
   },
