@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['hotelBookings'],
+  app_name: ['hotel-bookings-api'],
   /**
    * Your New Relic license key.
    */
