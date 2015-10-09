@@ -63,16 +63,12 @@ if ('development' == env) {
 
 }
 
-
-
-
 var job = new CronJob({
-  cronTime: '00 20 1 * * *',
+  cronTime: '00 00 10 * * *',
   onTick: function() {
     console.log('run');
    updateHotels();
   },
-  start: false,
-  // timeZone: 'America/Los_Angeles'
+  start: false
 });
 job.start();
