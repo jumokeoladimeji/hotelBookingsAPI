@@ -65,7 +65,7 @@ if ('development' == env) {
 }
 
 var job = new CronJob({
-  cronTime: '00 30 10 * * 0-7',
+  cronTime: '00 00 11 * * 0-6',
   onTick: function() {
     console.log('run');
    updateHotels();
@@ -73,3 +73,7 @@ var job = new CronJob({
   start: false
 });
 job.start();
+
+setInterval(function() {
+    http.get("https://hotel-bookings-api.herokuapp.com/");
+}, 300000);
