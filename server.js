@@ -64,7 +64,7 @@ if ('development' == env) {
 }
 
 var job = new CronJob({
-  cronTime: '00 00 10 * * *',
+  cronTime: '00 15 10 * * 0-7',
   onTick: function() {
     console.log('run');
    updateHotels();
