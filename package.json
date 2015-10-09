@@ -4,7 +4,8 @@
   "description": "An app to integrate hotelng API",
   "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+     "start": "node server.js"
   },
   "repository": {
     "type": "git",

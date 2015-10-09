@@ -1,5 +1,7 @@
 require('newrelic');
 var http = require('http');
+var https = require('https');
+
 var express = require('express');
 var path = require('path');
 var app = express();
@@ -65,7 +67,7 @@ if ('development' == env) {
 }
 
 var job = new CronJob({
-  cronTime: '00 00 11 * * 0-6',
+  cronTime: '00 15 11 * * 0-6',
   onTick: function() {
     console.log('run');
    updateHotels();
@@ -76,5 +78,5 @@ job.start();
 
 setInterval(function() {
   console.log('set interval in app');
-    http.get("https://hotel-bookings-api.herokuapp.com/");
+    https.get("https://hotel-bookings-api.herokuapp.com/");
 }, 300000);
