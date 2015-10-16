@@ -16,7 +16,7 @@ var saveToMongo = function(hotels) {
     }
     Hotels.collection.insert(hotels, function(err) {
       if (err) {
-        res.send({
+        return res.send({
           data: err
         });
       }
@@ -76,11 +76,11 @@ module.exports = function(app) {
       'statename': statename
     }, function(err, hotels) {
       if (err) {
-        res.send({
+        return res.send({
           err: err
         });
       }
-      res.json({
+      return res.json({
         count: hotels.length,
         data: hotels
       });
@@ -94,11 +94,11 @@ module.exports = function(app) {
       'city': city
     }, function(err, hotels) {
       if (err) {
-        res.send({
+        return res.send({
           err: err
         });
       }
-      res.json({
+      return res.json({
         count: hotels.length,
         data: hotels
       });
@@ -113,7 +113,7 @@ module.exports = function(app) {
     needle.get(url, function(error, response) {
       var responseArray;
       if (error) {
-        res.status(500).send({
+        return res.status(500).send({
           message: error
         });
       }
@@ -124,10 +124,10 @@ module.exports = function(app) {
         } catch (e) {
           console.log(e);
         }
-        res.status(200).send({
-          count: responseArray.length,
-          data: responseArray
-        });
+        return res.status(200).send({
+            count: responseArray.length,
+            data: responseArray
+          });
       }
 
     });
@@ -142,7 +142,7 @@ module.exports = function(app) {
     needle.get(url, function(error, response) {
       var responseArray;
       if (error) {
-        res.status(500).send({
+        return res.status(500).send({
           message: error
         });
       }
@@ -153,7 +153,7 @@ module.exports = function(app) {
         } catch (e) {
           console.log(e);
         }
-        res.status(200).send({
+        return res.status(200).send({
           count: responseArray.length,
           data: responseArray
         });
@@ -166,31 +166,39 @@ module.exports = function(app) {
   app.route('/api/getHotelBookingInfo').post(function(req, res) {
     var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
     var data = req.body;
+    var dataObj = _.pick(data, 'hotel_id', 'checkin', 'checkout', 'booked_rooms');
+    var size = _.size(dataObj);
+    if (size !== 4){
+      return res.send({data: 'Invalid Parameters'});
+    }
+    else{
 
+       needle.post(url, dataObj, function(error, response) {
+        var responseObj;
+        var body = JSON.stringify(response.body);
+        console.log('body', body);
 
-    needle.post(url, data, function(error, response) {
-      var responseObj;
-      var body = JSON.stringify(response.body);
-      console.log('body', body);
-      try {
+        try {
           responseObj = JSON.parse(response.body).data;
 
         } catch (e) {
           console.log(e);
         }
-      if (error) {
-        var errMessage = error.substr(error.indexOf('{"status"'));
-        res.status(500).send({
-          message: errMessage,
-        });
-      }
-      if (!error && response.statusCode == 200) {
-        res.status(200).send({
-          data: responseObj
-        });
-      }
+        if (error) {
+          var errMessage = error.substr(error.indexOf('{"status"'));
+          return res.status(500).send({
+            message: errMessage,
+          });
+        }
+        if (!error && response.statusCode == 200) {
+          return res.status(200).send({
+            data: responseObj
+          });
+        }
 
-    });
+      });
+    }
+     
 
   });
 
@@ -200,29 +208,28 @@ module.exports = function(app) {
     var data = req.body;
 
     needle.post(url, data, function(error, response) {
-          // console.log('response.body', response.body);
 
       var responseObj;
       var body = response.body;
 
       try {
-            body = body.substr(body.indexOf('{"status"'));
-            responseObj = JSON.parse(body).data;
+        body = body.substr(body.indexOf('{"status"'));
+        responseObj = JSON.parse(body).data;
 
       } catch (e) {
         console.log(e);
       }
       if (error) {
         var errMessage = error.substr(error.indexOf('{"status"'));
-        res.status(500).send({
+        return res.status(500).send({
           message: errMessage,
         });
       }
       // console.log('responseObj', responseObj);
       if (responseObj.status === "error") {
-        res.status(500).send(responseObj);
+        return res.status(500).send(responseObj);
       } else if (!error && (response.statusCode === 200) && (responseObj.status != "error")) {
-        res.status(200).send({
+        return res.status(200).send({
           data: responseObj
         });
       }
