@@ -69,11 +69,12 @@ module.exports = function(app) {
   });
   app.route('/api/getByState/:statename').get(function(req, res) {
     var statename = req.params.statename;
+    var nameQuery = new RegExp('^'+statename+'$', "i");
     //get by small letter and get by capital letter
     //
     //{name: new RegExp('^'+name+'$', "i")
     Hotels.find({
-      'statename': statename
+      'statename': nameQuery
     }, function(err, hotels) {
       if (err) {
         return res.send({
@@ -90,8 +91,9 @@ module.exports = function(app) {
   // /api/v1/hotels/:city
   app.route('/api/getByCity/:city').get(function(req, res) {
     var city = req.params.city;
+    var cityQuery = new RegExp('^'+city+'$', "i");
     Hotels.find({
-      'city': city
+      'city': cityQuery
     }, function(err, hotels) {
       if (err) {
         return res.send({
@@ -125,9 +127,9 @@ module.exports = function(app) {
           console.log(e);
         }
         return res.status(200).send({
-            count: responseArray.length,
-            data: responseArray
-          });
+          count: responseArray.length,
+          data: responseArray
+        });
       }
 
     });
@@ -164,16 +166,23 @@ module.exports = function(app) {
 
   //change this to a GET
   app.route('/api/getHotelBookingInfo').post(function(req, res) {
-    var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
-    var data = req.body;
-    var dataObj = _.pick(data, 'hotel_id', 'checkin', 'checkout', 'booked_rooms');
-    var size = _.size(dataObj);
-    if (size !== 4){
-      return res.send({data: 'Invalid Parameters'});
-    }
-    else{
+      var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
+      var data = req.body;
+      var dataObj = _.pick(data, 'hotel_id', 'checkin', 'checkout', 'booked_rooms');
+      var size = _.size(dataObj);
+      if (size !== 4) {
+        return res.send({
+            data: 'Invalid Parameters',
+            message : {
+              'hotel_id': 'The Hotel Id field is required',
+              'checkin': 'The checkin field is required',
+              'checkout': 'The checkout field is required',
+              'booked_rooms': 'Booked rooms array is required'
+            }
+        });
+    } else {
 
-       needle.post(url, dataObj, function(error, response) {
+      needle.post(url, dataObj, function(error, response) {
         var responseObj;
         var body = JSON.stringify(response.body);
         console.log('body', body);
@@ -198,42 +207,41 @@ module.exports = function(app) {
 
       });
     }
-     
+
 
   });
 
 
-  app.route('/api/bookHotel').post(function(req, res) {
-    var url = 'http://public.api.hotels.ng/api/api.php?cmd=make_booking';
-    var data = req.body;
+app.route('/api/bookHotel').post(function(req, res) {
+  var url = 'http://public.api.hotels.ng/api/api.php?cmd=make_booking';
+  var data = req.body;
 
-    needle.post(url, data, function(error, response) {
+  needle.post(url, data, function(error, response) {
 
-      var responseObj;
-      var body = response.body;
+    var responseObj;
+    var body = response.body;
 
-      try {
-        body = body.substr(body.indexOf('{"status"'));
-        responseObj = JSON.parse(body).data;
+    try {
+      body = body.substr(body.indexOf('{"status"'));
+      responseObj = JSON.parse(body).data;
 
-      } catch (e) {
-        console.log(e);
-      }
-      if (error) {
-        var errMessage = error.substr(error.indexOf('{"status"'));
-        return res.status(500).send({
-          message: errMessage,
-        });
-      }
-      // console.log('responseObj', responseObj);
-      if (responseObj.status === "error") {
-        return res.status(500).send(responseObj);
-      } else if (!error && (response.statusCode === 200) && (responseObj.status != "error")) {
-        return res.status(200).send({
-          data: responseObj
-        });
-      }
-    });
+    } catch (e) {
+      console.log(e);
+    }
+    if (error) {
+      var errMessage = error.substr(error.indexOf('{"status"'));
+      return res.status(500).send({
+        message: errMessage,
+      });
+    }
+    if (responseObj.status === "error") {
+      return res.status(500).send(responseObj);
+    } else if (!error && (response.statusCode === 200) && (responseObj.status != "error")) {
+      return res.status(200).send({
+        data: responseObj
+      });
+    }
   });
+});
 
 };
