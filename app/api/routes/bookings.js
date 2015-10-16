@@ -166,9 +166,12 @@ module.exports = function(app) {
   app.route('/api/getHotelBookingInfo').post(function(req, res) {
     var url = 'http://public.api.hotels.ng/api/api.php?cmd=get_booking_total_cost';
     var data = req.body;
+
+
     needle.post(url, data, function(error, response) {
       var responseObj;
       var body = JSON.stringify(response.body);
+      console.log('body', body);
       try {
           responseObj = JSON.parse(response.body).data;
 
@@ -197,9 +200,14 @@ module.exports = function(app) {
     var data = req.body;
 
     needle.post(url, data, function(error, response) {
+          // console.log('response.body', response.body);
+
       var responseObj;
+      var body = response.body;
+
       try {
-        responseObj = JSON.parse(response.body);
+            body = body.substr(body.indexOf('{"status"'));
+            responseObj = JSON.parse(body).data;
 
       } catch (e) {
         console.log(e);
@@ -210,6 +218,7 @@ module.exports = function(app) {
           message: errMessage,
         });
       }
+      // console.log('responseObj', responseObj);
       if (responseObj.status === "error") {
         res.status(500).send(responseObj);
       } else if (!error && (response.statusCode === 200) && (responseObj.status != "error")) {
