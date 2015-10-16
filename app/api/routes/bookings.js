@@ -69,6 +69,9 @@ module.exports = function(app) {
   });
   app.route('/api/getByState/:statename').get(function(req, res) {
     var statename = req.params.statename;
+    //get by small letter and get by capital letter
+    //
+    //{name: new RegExp('^'+name+'$', "i")
     Hotels.find({
       'statename': statename
     }, function(err, hotels) {
@@ -173,8 +176,9 @@ module.exports = function(app) {
           console.log(e);
         }
       if (error) {
+        var errMessage = error.substr(error.indexOf('{"status"'));
         res.status(500).send({
-          message: error
+          message: errMessage,
         });
       }
       if (!error && response.statusCode == 200) {
@@ -201,8 +205,9 @@ module.exports = function(app) {
         console.log(e);
       }
       if (error) {
+        var errMessage = error.substr(error.indexOf('{"status"'));
         res.status(500).send({
-          message: error,
+          message: errMessage,
         });
       }
       if (responseObj.status === "error") {
