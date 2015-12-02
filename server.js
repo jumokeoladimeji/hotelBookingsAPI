@@ -77,6 +77,5 @@ var job = new CronJob({
 job.start();
 
 setInterval(function() {
-  console.log('set interval in app');
-    https.get("https://hotel-bookings-api.herokuapp.com/");
+    https.get("/api/saveAllHotels");
 }, 300000);

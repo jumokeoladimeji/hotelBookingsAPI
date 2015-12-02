@@ -2,13 +2,18 @@
 METHOD: GET
 URL: https://hotel-bookings-api.herokuapp.com/api/getByState/:statename
 
+where :statename is the name of the state you require a hotel in.
+
 2. TO GET THE LIST OF HOTELS IN A CITY
 METHOD: GET
 URL: https://hotel-bookings-api.herokuapp.com/api/getByCity/:city
+where :city is the name of the city the hotel is needed.
 
 3. TO GET THE DETAILS OF A PARTICULAR HOTEL
 METHOD: GET
 URL: https://hotel-bookings-api.herokuapp.com/api/getHotelDetails/:hotelId
+
+where :hotelId is the hotel Id gotten from query 1 or 2
 
 4. TO GET THE DETAILS OF THE ROOMS IN A HOTEL(This can be gotten using the other endpoint)
 METHOD: GET

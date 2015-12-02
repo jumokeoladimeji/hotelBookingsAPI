@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Untitled Document</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script type="text/javascript" src="https://paywithcapture.com/live/assets/js/tokenization.js"></script>
+  <script type="text/javascript">
+  Pwc.setPublishableKey('uFmz/uE/SDT6GupOrSEXIZXGByjQ0zFkPyc9LqKHFqnTI0WPN3JS5kQPo/j9or0TOXlqMQj2lzHn/UGsQT4XeQ=='); // ... 
+
+
+  jQuery(function($) {
+    $('#payment-form').submit(function(event) {
+      var $form = $('#payment-form');
+      // Disable the submit button to prevent repeated clicks
+      $form.find('button').prop('disabled', true);
+      console.log('$form', $form);
+      Pwc.createToken($form, pwcResponseHandler);
+
+      // Prevent the form from submitting with the default action
+      return false;
+    });
+  });
+
+
+
+
+
+
+
+  var pwcResponseHandler = function(status, response) {
+    console.log(response, 'status', status);
+    var $form = $('#payment-form');
+    if (response.error == true) {
+
+      alert(response.error.message);
+    } else {
+
+      var token = response.token;
+      var lastfour = response.last4;
+      if (confirm(token)) {
+        // write script to post the token to the server.
+        $form.append($('<input type="hidden" name="pwcToken" />').val(token));
+        $form.append($('<input type="hidden" name="lastfour" />').val(lastfour));
+        // and submit
+        $form.get(0).submit();
+      }
+    }
+
+  };
+  </script>
+</head>
+
+<body>
+  <form action="" method="POST" id="payment-form" action="me.html">
+    <span class="payment-errors"></span>
+    <div class="form-row">
+      <label>
+        <span>Card Number</span>
+        <input type="text" size="20" data-pwc="number" />
+      </label>
+    </div>
+    <div class="form-row">
+      <label>
+        <span>CVC</span>
+        <input type="text" size="4" data-pwc="cvc" />
+      </label>
+    </div>
+    <div class="form-row">
+      <label> <span>Expiration (MM/YYYY)</span>
+        <input type="text" size="2" data-pwc="exp-month" />
+      </label>
+      <span> / </span>
+      <input type="text" size="4" data-pwc="exp-year" />
+    </div>
+    <button type="submit">Submit Payment</button>
+  </form>
+</body>
+
+</html>

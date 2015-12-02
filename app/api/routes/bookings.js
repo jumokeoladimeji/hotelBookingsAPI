@@ -172,7 +172,7 @@ module.exports = function(app) {
       var size = _.size(dataObj);
       if (size !== 4) {
         return res.send({
-            data: 'Invalid Parameters',
+            data: 'Invalid or Incomplete Parameters',
             message : {
               'hotel_id': 'The Hotel Id field is required',
               'checkin': 'The checkin field is required',
@@ -215,12 +215,10 @@ module.exports = function(app) {
 app.route('/api/bookHotel').post(function(req, res) {
   var url = 'http://public.api.hotels.ng/api/api.php?cmd=make_booking';
   var data = req.body;
-
   needle.post(url, data, function(error, response) {
 
     var responseObj;
     var body = response.body;
-
     try {
       body = body.substr(body.indexOf('{"status"'));
       responseObj = JSON.parse(body).data;
